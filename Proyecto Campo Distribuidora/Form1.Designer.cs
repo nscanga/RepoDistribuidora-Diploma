@@ -32,6 +32,7 @@
             this.textBoxPass = new System.Windows.Forms.TextBox();
             this.ButtonIngresar = new System.Windows.Forms.Button();
             this.buttonCrearUsuario = new System.Windows.Forms.Button();
+            this.textBoxNombre = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // textBoxUsuario
@@ -68,11 +69,19 @@
             this.buttonCrearUsuario.UseVisualStyleBackColor = true;
             this.buttonCrearUsuario.Click += new System.EventHandler(this.buttonCrearUsuario_Click);
             // 
+            // textBoxNombre
+            // 
+            this.textBoxNombre.Location = new System.Drawing.Point(412, 52);
+            this.textBoxNombre.Name = "textBoxNombre";
+            this.textBoxNombre.Size = new System.Drawing.Size(100, 20);
+            this.textBoxNombre.TabIndex = 4;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.textBoxNombre);
             this.Controls.Add(this.buttonCrearUsuario);
             this.Controls.Add(this.ButtonIngresar);
             this.Controls.Add(this.textBoxPass);
@@ -90,6 +99,7 @@
         private System.Windows.Forms.TextBox textBoxPass;
         private System.Windows.Forms.Button ButtonIngresar;
         private System.Windows.Forms.Button buttonCrearUsuario;
+        private System.Windows.Forms.TextBox textBoxNombre;
     }
 }
 

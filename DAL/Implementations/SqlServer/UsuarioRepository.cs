@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using DAL.Tools;
 
 namespace DAL.Implementations.SqlServer
 {
@@ -27,7 +28,7 @@ namespace DAL.Implementations.SqlServer
         #region Statements
         private string InsertStatement
         {
-            get => "INSERT INTO [dbo].[Usuario] (Nombre, Email, Contraseña, PerfilId) VALUES (@Nombre, @Email, @Contraseña, @PerfilId)";
+            get => "INSERT INTO [dbo].[Usuario] (IdUsuario, Nombre, Email, Contrasena, id_perfil) VALUES (@IdUsuario, @Nombre, @Email, @Contrasena, @id_perfil)";
         }
         private string FindByEmailStatement
         {
@@ -63,18 +64,19 @@ namespace DAL.Implementations.SqlServer
         {
             try
             {
-                using (SqlConnection conn = new SqlConnection("MainConString"))
+                obj.IdUsuario = Guid.NewGuid();  // Generar un nuevo Guid
+
+                SqlParameter[] parameters = new SqlParameter[]
                 {
-                    conn.Open();
-                    using (SqlCommand cmd = new SqlCommand(InsertStatement, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@Nombre", obj.Nombre);
-                        cmd.Parameters.AddWithValue("@Email", obj.Email);
-                        cmd.Parameters.AddWithValue("@PasswordHash", obj.Contraseña);
-                        cmd.Parameters.AddWithValue("@PerfilId", obj.PerfilId);
-                        cmd.ExecuteNonQuery();
-                    }
-                }
+                    new SqlParameter("@IdUsuario", obj.IdUsuario),
+                    new SqlParameter("@Nombre", obj.Nombre),
+                    new SqlParameter("@Email", obj.Email),
+                    new SqlParameter("@Contrasena", obj.Contrasena),
+                    new SqlParameter("@id_perfil", obj.id_perfil)
+                };
+
+                SqlHelper.ExecuteNonQuery(InsertStatement, System.Data.CommandType.Text, parameters);
+
                 _bitacoraService.Write("Usuario agregado exitosamente", LogLevel.Information);
             }
             catch (Exception ex)
@@ -83,6 +85,9 @@ namespace DAL.Implementations.SqlServer
                 throw new Exception("Error al agregar usuario", ex);
             }
         }
+
+
+
 
         public void Delete(Guid id)
         {
@@ -109,8 +114,7 @@ namespace DAL.Implementations.SqlServer
                                     IdUsuario = reader.GetGuid(0),
                                     Nombre = reader.GetString(1),
                                     Email = reader.GetString(2),
-                                    Contraseña = reader.GetString(3),
-                                    PerfilId = reader.GetInt32(4)
+                                    Contrasena = reader.GetString(3),
                                 };
                             }
                         }
@@ -145,8 +149,7 @@ namespace DAL.Implementations.SqlServer
                                     IdUsuario = reader.GetGuid(0),
                                     Nombre = reader.GetString(1),
                                     Email = reader.GetString(2),
-                                    Contraseña = reader.GetString(3),
-                                    PerfilId = reader.GetInt32(4)
+                                    Contrasena = reader.GetString(3),
                                 };
                                 users.Add(user);
                             }
@@ -180,8 +183,7 @@ namespace DAL.Implementations.SqlServer
                         cmd.Parameters.AddWithValue("@Id", obj.IdUsuario);
                         cmd.Parameters.AddWithValue("@Nombre", obj.Nombre);
                         cmd.Parameters.AddWithValue("@Email", obj.Email);
-                        cmd.Parameters.AddWithValue("@PasswordHash", obj.Contraseña);
-                        cmd.Parameters.AddWithValue("@PerfilId", obj.PerfilId);
+                        cmd.Parameters.AddWithValue("@PasswordHash", obj.Contrasena);
                         cmd.ExecuteNonQuery();
                     }
                 }

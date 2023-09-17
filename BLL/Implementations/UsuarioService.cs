@@ -15,22 +15,23 @@ namespace BLL.Implementations
     public class UsuarioService : IUsuarioService<Usuario>
     {
         private readonly IUsuarioRepository _usuarioRepository;
-        private readonly ILogger _logger;
+        private readonly ILogger<UsuarioService> _logger;  // Cambia esta línea
         private readonly BitacoraService _bitacoraService;
 
-        public UsuarioService(IUsuarioRepository usuarioRepository, ILogger logger, BitacoraService bitacoraService)
+        public UsuarioService(IUsuarioRepository usuarioRepository, ILogger<UsuarioService> logger, BitacoraService bitacoraService)
         {
             _usuarioRepository = usuarioRepository;
-            _logger = logger;
+            _logger = logger; 
             _bitacoraService = bitacoraService;
         }
+
 
         public Usuario Login(string email, string password)
         {
             try
             {
                 var user = _usuarioRepository.FindByEmail(email);
-                if (user == null || !ValidatePassword(password, user.Contraseña))
+                if (user == null || !ValidatePassword(password, user.Contrasena))
                 {
                     _logger.Log(LogLevel.Error, "Intento de inicio de sesión fallido");
                     _bitacoraService.Write("Intento de inicio de sesión fallido", LogLevel.Error);
@@ -50,6 +51,18 @@ namespace BLL.Implementations
 
         public void Add(Usuario obj)
         {
+            if (obj == null)
+            {
+                _logger.Log(LogLevel.Error, "El objeto Usuario es null");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(obj.Nombre) || string.IsNullOrEmpty(obj.Email) || string.IsNullOrEmpty(obj.Contrasena))
+            {
+                _logger.Log(LogLevel.Error, "Uno o más campos del objeto Usuario son null o vacíos");
+                return;
+            }
+
             try
             {
                 _usuarioRepository.Add(obj);  // Asume que tienes un método Add en tu IUsuarioRepository
@@ -64,6 +77,7 @@ namespace BLL.Implementations
                 throw;
             }
         }
+
 
 
 

@@ -4,23 +4,21 @@ using BLL.Implementations;
 using BLL.Interfaces;
 using DAL.Interfaces;
 using Domain;
-using Microsoft.Build.Framework;
 using Microsoft.Extensions.Logging; // Asegúrate de tener esta referencia
 using Services.BaseService;
+using Microsoft.Extensions.DependencyInjection;
+
 
 namespace Proyecto_Campo_Distribuidora
 {
     public partial class Form1 : Form
     {
-        private UsuarioService _usuarioService;
-        private BitacoraService _bitacoraService;
-
+        private readonly UsuarioService _usuarioService;
+        private readonly BitacoraService _bitacoraService;
 
         public Form1(UsuarioService usuarioService, BitacoraService bitacoraService)
         {
             InitializeComponent();
-
-            // 
             _usuarioService = usuarioService;
             _bitacoraService = bitacoraService;
         }
@@ -35,14 +33,13 @@ namespace Proyecto_Campo_Distribuidora
                 var user = _usuarioService.Login(email, password);
                 if (user != null)
                 {
-                    // Iniciar sesión exitosamente
-                    _bitacoraService.Write("Inicio de sesión exitoso", Microsoft.Extensions.Logging.LogLevel.Information);
+                    _bitacoraService.Write("Inicio de sesión exitoso", LogLevel.Information);
                     MessageBox.Show("Inicio de sesión exitoso");
                 }
             }
             catch (Exception ex)
             {
-                _bitacoraService.Write($"Error al iniciar sesión: {ex.Message}", Microsoft.Extensions.Logging.LogLevel.Error);
+                _bitacoraService.Write($"Error al iniciar sesión: {ex.Message}", LogLevel.Error);
                 MessageBox.Show("Error al iniciar sesión");
             }
         }
@@ -52,16 +49,17 @@ namespace Proyecto_Campo_Distribuidora
             // Crear una instancia del objeto Usuario
             Usuario newUser = new Usuario
             {
-                Nombre = textBoxUsuario.Text,  // Puedes reemplazar esto con un valor de un TextBox, por ejemplo
-                Email = textBoxPass.Text,  // Ídem
-                Contraseña = "contraseña_encriptada", // Asegúrate de encriptar la contraseña
-                PerfilId = 1 // ID del perfil al que pertenece el usuario
+                IdUsuario = Guid.NewGuid(),
+                Nombre = textBoxNombre.Text,  // Asegúrate de tener un TextBox para el nombre
+                Email = textBoxUsuario.Text,  // Ídem para el email
+                Contrasena = textBoxPass.Text, // Asegúrate de encriptar la contraseña
+                id_perfil = 1  // Genera un nuevo GUID y lo convierte a string
             };
 
             try
             {
                 // Agregar el nuevo usuario
-                _usuarioService.Add(newUser);  // Nota el cambio aquí: ahora pasamos newUser como argumento
+                _usuarioService.Add(newUser);  // Ahora pasamos newUser como argumento
 
                 // Registrar en la bitácora
                 _bitacoraService.Write("Usuario agregado exitosamente", LogLevel.Information);
@@ -76,7 +74,6 @@ namespace Proyecto_Campo_Distribuidora
                 MessageBox.Show("Error al crear el usuario.");
             }
         }
-
 
     }
 }
