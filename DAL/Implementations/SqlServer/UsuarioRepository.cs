@@ -60,35 +60,7 @@ namespace DAL.Implementations.SqlServer
             get => "SELECT IdUsuario , Nombre, FechaNac FROM [dbo].[Cliente]";
         }
         #endregion
-        /*
-        public void Add(Usuario obj)
-        {
-            try
-            {
-                obj.IdUsuario = Guid.NewGuid();  // Generar un nuevo Guid
-
-                SqlParameter[] parameters = new SqlParameter[]
-                {
-                    new SqlParameter("@IdUsuario", obj.IdUsuario),
-                    new SqlParameter("@Nombre", obj.Nombre),
-                    new SqlParameter("@Email", obj.Email),
-                    new SqlParameter("@Contrasena", obj.Contrasena),
-                    new SqlParameter("@id_perfil", obj.id_perfil)
-                };
-
-                SqlHelper.ExecuteNonQuery(InsertStatement, System.Data.CommandType.Text, parameters);
-
-                _bitacoraService.Write("Usuario agregado exitosamente", LogLevel.Information);
-            }
-            catch (Exception ex)
-            {
-                _bitacoraService.Write($"Error al agregar usuario: {ex.Message}", LogLevel.Error);
-                throw new Exception("Error al agregar usuario", ex);
-            }
-        }
-        */
-
-        // Método Add en tu repositorio
+        
         public void Add(Usuario obj)
         {
             try

@@ -136,6 +136,7 @@
             this.buttonCrearUsuario.TabIndex = 10;
             this.buttonCrearUsuario.Text = "Crear";
             this.buttonCrearUsuario.UseVisualStyleBackColor = true;
+            this.buttonCrearUsuario.Click += new System.EventHandler(this.buttonCrearUsuario_Click);
             // 
             // VolverPrelogin
             // 

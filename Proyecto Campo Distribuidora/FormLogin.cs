@@ -46,6 +46,10 @@ namespace Proyecto_Campo_Distribuidora
 
         private void buttonCrearUsuario_Click(object sender, EventArgs e)
         {
+
+            FormCreacionUsuarios formCreacionUsuarios = new FormCreacionUsuarios(_usuarioService, _bitacoraService);
+            formCreacionUsuarios.Show();
+            /*
             // Crear una instancia del objeto Usuario
             Usuario newUser = new Usuario
             {
@@ -73,6 +77,7 @@ namespace Proyecto_Campo_Distribuidora
 
                 MessageBox.Show("Error al crear el usuario.");
             }
+            */
         }
 
     }
