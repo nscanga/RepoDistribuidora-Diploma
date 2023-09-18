@@ -9,7 +9,7 @@ namespace DAL.Interfaces
 {
     public interface IUsuarioRepository : IGenericRepository<Usuario>
     {
-        Usuario FindByEmail(string email);
+        Usuario FindByEmail(string email, string password);
     }
 
 }

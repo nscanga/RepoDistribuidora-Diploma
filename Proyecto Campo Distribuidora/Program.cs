@@ -39,7 +39,7 @@ namespace Proyecto_Campo_Distribuidora
             {
                 var usuarioService = serviceProvider.GetService<UsuarioService>();
                 var bitacoraService = serviceProvider.GetService<BitacoraService>();
-                Application.Run(new Form1(usuarioService, bitacoraService));
+                Application.Run(new FormLogin(usuarioService, bitacoraService));
             }
             catch (Exception ex)
             {

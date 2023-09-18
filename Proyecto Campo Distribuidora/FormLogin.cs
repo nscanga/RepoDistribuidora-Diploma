@@ -11,12 +11,12 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Proyecto_Campo_Distribuidora
 {
-    public partial class Form1 : Form
+    public partial class FormLogin : Form
     {
         private readonly UsuarioService _usuarioService;
         private readonly BitacoraService _bitacoraService;
 
-        public Form1(UsuarioService usuarioService, BitacoraService bitacoraService)
+        public FormLogin(UsuarioService usuarioService, BitacoraService bitacoraService)
         {
             InitializeComponent();
             _usuarioService = usuarioService;

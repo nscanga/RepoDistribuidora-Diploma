@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using DAL.Tools;
+using System.Data;
 
 namespace DAL.Implementations.SqlServer
 {
@@ -59,7 +60,7 @@ namespace DAL.Implementations.SqlServer
             get => "SELECT IdUsuario , Nombre, FechaNac FROM [dbo].[Cliente]";
         }
         #endregion
-
+        /*
         public void Add(Usuario obj)
         {
             try
@@ -85,6 +86,47 @@ namespace DAL.Implementations.SqlServer
                 throw new Exception("Error al agregar usuario", ex);
             }
         }
+        */
+
+        // Método Add en tu repositorio
+        public void Add(Usuario obj)
+        {
+            try
+            {
+                obj.IdUsuario = Guid.NewGuid();  // Generar un nuevo Guid
+                obj.Contrasena = HashPassword(obj.Contrasena);  // Hashear la contraseña
+
+                SqlParameter[] parameters = new SqlParameter[]
+                {
+                    new SqlParameter("@IdUsuario", obj.IdUsuario),
+                    new SqlParameter("@Nombre", obj.Nombre),
+                    new SqlParameter("@Email", obj.Email),
+                    new SqlParameter("@Contrasena", obj.Contrasena),
+                    new SqlParameter("@id_perfil", obj.id_perfil)
+                };
+
+                SqlHelper.ExecuteNonQuery(InsertStatement, System.Data.CommandType.Text, parameters);
+
+                _bitacoraService.Write("Usuario agregado exitosamente", LogLevel.Information);
+            }
+            catch (Exception ex)
+            {
+                _bitacoraService.Write($"Error al agregar usuario: {ex.Message}", LogLevel.Error);
+                throw new Exception("Error al agregar usuario", ex);
+            }
+        }
+
+        // Método para hashear la contraseña
+        private string HashPassword(string password)
+        {
+            return BCrypt.Net.BCrypt.HashPassword(password);
+        }
+
+        // Método ValidatePassword en tu servicio
+        private bool ValidatePassword(string password, string storedHash)
+        {
+            return BCrypt.Net.BCrypt.Verify(password, storedHash);
+        }
 
 
 
@@ -94,32 +136,39 @@ namespace DAL.Implementations.SqlServer
             throw new NotImplementedException(); //ver baja logica 
         }
 
-        public Usuario FindByEmail(string email)
+        public Usuario FindByEmail(string email, string password)
         {
             try
             {
                 Usuario user = null;
-                using (SqlConnection conn = new SqlConnection("MainConString"))
+
+                SqlParameter[] parameters = new SqlParameter[]
                 {
-                    conn.Open();
-                    using (SqlCommand cmd = new SqlCommand(FindByEmailStatement, conn))
+            new SqlParameter("@Email", email)
+                };
+
+                // Aquí asumo que tienes una implementación de SqlHelper similar a la que usaste en Add
+                using (SqlDataReader reader = SqlHelper.ExecuteReader(FindByEmailStatement, System.Data.CommandType.Text, parameters))
+                {
+                    if (reader.Read())
                     {
-                        cmd.Parameters.AddWithValue("@Email", email);
-                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        user = new Usuario
                         {
-                            if (reader.Read())
-                            {
-                                user = new Usuario
-                                {
-                                    IdUsuario = reader.GetGuid(0),
-                                    Nombre = reader.GetString(1),
-                                    Email = reader.GetString(2),
-                                    Contrasena = reader.GetString(3),
-                                };
-                            }
+                            IdUsuario = reader.GetGuid(0),
+                            Nombre = reader.GetString(1),
+                            Email = reader.GetString(2),
+                            Contrasena = reader.GetString(3),
+                        };
+
+                        // Verificar la contraseña con ValidatePassword
+                        if (!ValidatePassword(password, user.Contrasena))
+                        {
+                            _bitacoraService.Write($"Contraseña incorrecta para el email: {email}", LogLevel.Warning);
+                            return null;
                         }
                     }
                 }
+
                 _bitacoraService.Write($"Usuario encontrado por email: {email}", LogLevel.Information);
                 return user;
             }
@@ -129,6 +178,10 @@ namespace DAL.Implementations.SqlServer
                 throw new Exception("Error al buscar usuario por email", ex);
             }
         }
+
+
+
+
 
         public List<Usuario> GetAll()
         {

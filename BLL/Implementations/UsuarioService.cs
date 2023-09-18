@@ -30,8 +30,8 @@ namespace BLL.Implementations
         {
             try
             {
-                var user = _usuarioRepository.FindByEmail(email);
-                if (user == null || !ValidatePassword(password, user.Contrasena))
+                var user = _usuarioRepository.FindByEmail(email, password);
+                if (user == null)
                 {
                     _logger.Log(LogLevel.Error, "Intento de inicio de sesión fallido");
                     _bitacoraService.Write("Intento de inicio de sesión fallido", LogLevel.Error);
@@ -48,6 +48,7 @@ namespace BLL.Implementations
                 throw;
             }
         }
+
 
         public void Add(Usuario obj)
         {
