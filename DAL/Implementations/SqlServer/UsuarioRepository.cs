@@ -61,7 +61,7 @@ namespace DAL.Implementations.SqlServer
         }
         #endregion
 
-        public void Add(Usuario obj, Perfil perfil)
+        public void Add(Usuario obj)
         {
             try
             {
@@ -75,7 +75,7 @@ namespace DAL.Implementations.SqlServer
                 new SqlParameter("@Nombre", obj.Nombre),
                 new SqlParameter("@Email", obj.Email),
                 new SqlParameter("@Contrasena", obj.Contrasena),
-                new SqlParameter("@id_perfil", perfil.IdPerfil)
+                new SqlParameter("@id_perfil", obj.id_perfil)
                 };
 
                 SqlHelper.ExecuteNonQuery(InsertStatement, System.Data.CommandType.Text, parameters);

@@ -8,10 +8,11 @@ namespace Domain
 {
     public class Perfil
     {
-        public int IdPerfil { get; set; }
+        public Guid IdPerfil { get; set; }
         public enum TipoPerfil { Administrador, Cliente, Empleado, Proveedor }
         public string Descripcion { get; set; }
         public TipoPerfil PerfilTipo { get; set; } 
+
 
     }
 }

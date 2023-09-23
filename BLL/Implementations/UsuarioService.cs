@@ -25,10 +25,7 @@ namespace BLL.Implementations
             _bitacoraService = bitacoraService;
         }
 
-        public void AssignPerfilId(Usuario user, Perfil perfil)
-        {
-            user.id_perfil = perfil.IdPerfil;
-        }
+
 
 
 
@@ -56,17 +53,11 @@ namespace BLL.Implementations
         }
 
 
-        public void Add(Usuario obj, Perfil perfil)
+        public void Add(Usuario obj)
         {
             if (obj == null)
             {
                 _logger.Log(LogLevel.Error, "El objeto Usuario es null");
-                return;
-            }
-
-            if (perfil == null)
-            {
-                _logger.Log(LogLevel.Error, "El objeto Perfil es null");
                 return;
             }
 
@@ -78,11 +69,6 @@ namespace BLL.Implementations
 
             try
             {
-                // Asignar el IdPerfil al usuario antes de agregarlo al repositorio
-                obj.id_perfil = perfil.IdPerfil;
-
-                _usuarioRepository.Add(obj, perfil);  // Asume que tienes un método Add en tu IUsuarioRepository que acepta un Usuario
-
                 _logger.Log(LogLevel.Information, "Usuario agregado exitosamente");
                 _bitacoraService.Write("Usuario agregado exitosamente", LogLevel.Information);
             }

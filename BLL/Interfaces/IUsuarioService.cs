@@ -10,7 +10,7 @@ namespace BLL.Interfaces
     public interface IUsuarioService<T>
     {
         Usuario Login(string email, string password);
-        void Add(T obj, Perfil perfil);  // Método actualizado
+        void Add(T obj);  // Método actualizado
     }
 
 }
