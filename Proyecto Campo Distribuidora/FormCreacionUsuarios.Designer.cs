@@ -146,6 +146,7 @@
             this.VolverPrelogin.TabIndex = 11;
             this.VolverPrelogin.Text = "Volver";
             this.VolverPrelogin.UseVisualStyleBackColor = true;
+            this.VolverPrelogin.Click += new System.EventHandler(this.VolverPrelogin_Click);
             // 
             // FormCreacionUsuarios
             // 

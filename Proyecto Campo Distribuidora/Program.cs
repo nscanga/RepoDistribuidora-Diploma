@@ -24,12 +24,12 @@ namespace Proyecto_Campo_Distribuidora
                 {
                     builder.AddConsole();
                 })
-                .AddScoped<IUsuarioRepository, UsuarioRepository>()  // Asume que UsuarioRepository es la implementación de IUsuarioRepository
+                .AddScoped<IUsuarioRepository, UsuarioRepository>()  
                 .AddScoped<BitacoraService>()
                 .AddScoped<UsuarioService>()
                 .BuildServiceProvider();
 
-            var logger = serviceProvider.GetService<ILogger<UsuarioService>>();  // Obtener el logger genérico
+            var logger = serviceProvider.GetService<ILogger<UsuarioService>>();  
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -44,7 +44,6 @@ namespace Proyecto_Campo_Distribuidora
             catch (Exception ex)
             {
                 Console.WriteLine($"Error: {ex.Message}");
-                // Aquí podrías añadir más lógica para manejar el error
             }
         }
     }

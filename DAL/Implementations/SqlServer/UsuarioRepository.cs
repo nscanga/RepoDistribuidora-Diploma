@@ -60,21 +60,22 @@ namespace DAL.Implementations.SqlServer
             get => "SELECT IdUsuario , Nombre, FechaNac FROM [dbo].[Cliente]";
         }
         #endregion
-        
-        public void Add(Usuario obj)
+
+        public void Add(Usuario obj, Perfil perfil)
         {
             try
             {
                 obj.IdUsuario = Guid.NewGuid();  // Generar un nuevo Guid
                 obj.Contrasena = HashPassword(obj.Contrasena);  // Hashear la contraseña
 
+
                 SqlParameter[] parameters = new SqlParameter[]
                 {
-                    new SqlParameter("@IdUsuario", obj.IdUsuario),
-                    new SqlParameter("@Nombre", obj.Nombre),
-                    new SqlParameter("@Email", obj.Email),
-                    new SqlParameter("@Contrasena", obj.Contrasena),
-                    new SqlParameter("@id_perfil", obj.id_perfil)
+                new SqlParameter("@IdUsuario", obj.IdUsuario),
+                new SqlParameter("@Nombre", obj.Nombre),
+                new SqlParameter("@Email", obj.Email),
+                new SqlParameter("@Contrasena", obj.Contrasena),
+                new SqlParameter("@id_perfil", perfil.IdPerfil)
                 };
 
                 SqlHelper.ExecuteNonQuery(InsertStatement, System.Data.CommandType.Text, parameters);

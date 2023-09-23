@@ -13,7 +13,7 @@ namespace DAL.Interfaces
         /// Método genérico para agregar un objeto a un Repositorio
         /// </summary>
         /// <param name="obj">Intancia esperada...</param>   
-        void Add(T obj);
+        void Add(T obj, Perfil perfil);
         //void Add(T obj);
     }
 }

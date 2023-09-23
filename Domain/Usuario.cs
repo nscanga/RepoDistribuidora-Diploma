@@ -13,6 +13,6 @@ namespace Domain
         public string Email { get; set; }
         public string Contrasena { get; set; }
         public int id_perfil { get; set; }
-        public Perfil Perfil { get; set; }
+        public Perfil PerfilUsuario { get; set; }
     }
 }

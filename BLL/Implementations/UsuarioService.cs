@@ -15,7 +15,7 @@ namespace BLL.Implementations
     public class UsuarioService : IUsuarioService<Usuario>
     {
         private readonly IUsuarioRepository _usuarioRepository;
-        private readonly ILogger<UsuarioService> _logger;  // Cambia esta línea
+        private readonly ILogger<UsuarioService> _logger;  
         private readonly BitacoraService _bitacoraService;
 
         public UsuarioService(IUsuarioRepository usuarioRepository, ILogger<UsuarioService> logger, BitacoraService bitacoraService)
@@ -24,6 +24,12 @@ namespace BLL.Implementations
             _logger = logger; 
             _bitacoraService = bitacoraService;
         }
+
+        public void AssignPerfilId(Usuario user, Perfil perfil)
+        {
+            user.id_perfil = perfil.IdPerfil;
+        }
+
 
 
         public Usuario Login(string email, string password)
@@ -50,11 +56,17 @@ namespace BLL.Implementations
         }
 
 
-        public void Add(Usuario obj)
+        public void Add(Usuario obj, Perfil perfil)
         {
             if (obj == null)
             {
                 _logger.Log(LogLevel.Error, "El objeto Usuario es null");
+                return;
+            }
+
+            if (perfil == null)
+            {
+                _logger.Log(LogLevel.Error, "El objeto Perfil es null");
                 return;
             }
 
@@ -66,7 +78,10 @@ namespace BLL.Implementations
 
             try
             {
-                _usuarioRepository.Add(obj);  // Asume que tienes un método Add en tu IUsuarioRepository
+                // Asignar el IdPerfil al usuario antes de agregarlo al repositorio
+                obj.id_perfil = perfil.IdPerfil;
+
+                _usuarioRepository.Add(obj, perfil);  // Asume que tienes un método Add en tu IUsuarioRepository que acepta un Usuario
 
                 _logger.Log(LogLevel.Information, "Usuario agregado exitosamente");
                 _bitacoraService.Write("Usuario agregado exitosamente", LogLevel.Information);
@@ -78,6 +93,7 @@ namespace BLL.Implementations
                 throw;
             }
         }
+
 
 
 
