@@ -60,8 +60,10 @@
   <ItemGroup>
     <Compile Include="BusinessExceptions\ClienteNoExisteException.cs" />
     <Compile Include="Class1.cs" />
+    <Compile Include="Implementations\PerfilService.cs" />
     <Compile Include="Implementations\UsuarioService.cs" />
     <Compile Include="Interfaces\IGenericBusinessRule.cs" />
+    <Compile Include="Interfaces\IPerfilService.cs" />
     <Compile Include="Interfaces\IUsuarioService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Services.BaseService;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -24,6 +25,12 @@ namespace DAL.Implementations.SqlServer
         {
             get => "INSERT INTO [dbo].[Perfil] (IdPerfil, TipoPerfil, descripcion) VALUES (@IdPerfil, @TipoPerfil, @descripcion)";
         }
+
+        private string FindByTipoStatement
+        {
+            get => "SELECT * FROM [dbo].[Perfil] WHERE TipoPerfil = @TipoPerfil";
+        }
+        
 
         public PerfilRepository() { }
         public void Add(Perfil obj)
@@ -73,6 +80,39 @@ namespace DAL.Implementations.SqlServer
         public void Update(Perfil obj)
         {
             throw new NotImplementedException();
+        }
+
+        public Perfil FindByTipo(Perfil.TipoPerfil tipo)
+        {
+            try
+            {
+                Perfil perfil = null;
+
+                SqlParameter[] parameters = new SqlParameter[]
+                {
+                    new SqlParameter("@TipoPerfil", tipo.ToString())
+                };
+
+                using (SqlDataReader reader = SqlHelper.ExecuteReader(FindByTipoStatement, System.Data.CommandType.Text, parameters))
+                {
+                    if (reader.Read())
+                    {
+                        perfil = new Perfil
+                        {
+                            IdPerfil = reader.GetGuid(0),
+                            PerfilTipo = (Perfil.TipoPerfil)Enum.Parse(typeof(Perfil.TipoPerfil), reader.GetString(1)),
+                            Descripcion = reader.GetString(2)
+                        };
+                    }
+                }
+
+                return perfil;
+            }
+            catch (Exception ex)
+            {
+                _bitacoraService.Write($"Error al buscar perfil por tipo: {ex.Message}", LogLevel.Error);
+                throw new Exception("Error al buscar perfil por tipo", ex);
+            }
         }
     }
 }

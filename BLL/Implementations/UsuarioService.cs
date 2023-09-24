@@ -27,8 +27,6 @@ namespace BLL.Implementations
 
 
 
-
-
         public Usuario Login(string email, string password)
         {
             try

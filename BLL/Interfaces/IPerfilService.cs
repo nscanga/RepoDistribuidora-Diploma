@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DAL.Interfaces
+namespace BLL.Interfaces
 {
-    public interface IPerfilRepository : IGenericRepository<Perfil>
+    public interface IPerfilService : IGenericBusinessRule<Perfil>
     {
         Perfil FindByTipo(Perfil.TipoPerfil tipo);
     }
